@@ -1,0 +1,14 @@
+
+shiksha,Python,1,5
+shiksha,Python,2,5
+shiksha,Python,2,5
+shiksha,Python,4,5
+shiksha,Python,3,5
+pooja,Python,2,3
+shiksha,Python,3,4
+shiksha,Python,4,5
+jayash,AI Basics,2,5
+jayash,Python,3,5
+pooja,Python,3,5
+jayash,Python,3,5
+bhavika,Python,4,5
