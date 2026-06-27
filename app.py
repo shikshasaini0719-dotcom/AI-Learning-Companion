@@ -1,7 +1,27 @@
 import streamlit as st
 import random
 import time
-from questions import python_questions, ai_questions, ml_questions
+from questions_old import python_questions, ai_questions, ml_questions
+
+def load_leaderboard():
+    data = []
+
+    try:
+        with open("leaderboard.txt", "r") as f:
+            for line in f:
+                parts = line.strip().split(",")
+
+                if len(parts) == 2:
+                    name = parts[0]
+                    score = int(parts[1])
+                    data.append((name, score))
+    except:
+        pass
+
+    # sort by score (highest first)
+    data.sort(key=lambda x: x[1], reverse=True)
+
+    return data
 
 # ---------------- SESSION STATE ----------------
 if "score" not in st.session_state:
@@ -52,6 +72,9 @@ if "wrong_topics" not in st.session_state:
 if "wrong_answers" not in st.session_state:
     st.session_state.wrong_answers = 0
 
+if "ai_tutor" not in st.session_state:
+    st.session_state.ai_tutor = True
+
 
 # ---------------- UI ----------------
 st.markdown("## 🤖 AI Learning Companion")
@@ -64,6 +87,11 @@ name = st.text_input("Enter your Name")
 subject = st.selectbox(
     "Choose Subject",
     ["Python", "AI Basics", "Machine Learning"]
+)
+
+st.session_state.ai_tutor = st.checkbox(
+    "🤖 AI Tutor Mode (Explain answers)",
+    value=True
 )
 
 # ---------------- START QUIZ ----------------
@@ -208,6 +236,35 @@ if st.session_state.started and st.session_state.questions:
                         }
 
         st.bar_chart(chart_data)
+        st.subheader("🏆 Leaderboard")
+
+        data = load_leaderboard()
+
+        if data:
+            rank = 1
+            table = []
+
+            for name, score in data:
+                medal = ""
+
+                if rank == 1:
+                    medal = "🥇"
+                elif rank == 2:
+                    medal = "🥈"
+                elif rank == 3:
+                    medal = "🥉"
+
+                table.append({
+                    "Rank": f"{medal} {rank}",
+                    "Name": name,
+                    "Score": score
+                })
+
+                rank += 1
+
+            st.dataframe(table)
+        else:
+            st.info("No leaderboard data yet.")
         st.subheader("📚 Topics To Review")
 
         if st.session_state.wrong_topics:
@@ -256,11 +313,11 @@ if st.session_state.started and st.session_state.questions:
             st.markdown("### 🧾 Question")
             st.success(q["question"])
 
-            answer = st.text_input(
-                "Your Answer",
+            answer = st.radio(
+                "Choose your answer:",
+                q["options"],
                 key=f"ans_{q_index}"
             )
-
             col1, col2 = st.columns(2)
 
             with col1:
@@ -268,31 +325,47 @@ if st.session_state.started and st.session_state.questions:
 
             with col2:
                 skip = st.button("⏭️ Skip")
+                
+            if st.button("💡 Hint"):
+                st.warning(f"Hint: This question is about {q['topic']}")
 
             if submit:
 
-                    if answer.strip().lower() == q["answer"].strip().lower():
-
+                    if answer == q["answer"]:
                         st.success("🎉 Correct!")
+
+                        if st.session_state.ai_tutor:
+                            st.info(f"""
+                    🧠 AI Tutor Explanation:
+
+                    ✔ Correct Answer: {q['answer']}
+
+                    💡 Why: {q['explanation']}
+
+                    🎯 Tip: Revise {q['topic']} once for strong exam prep.
+                    """)
+
                         st.session_state.score += 1
 
                     else:
-
-                        st.error(
-                        f"❌ Wrong! Correct answer: {q['answer']}"
-                        )
-
+                        st.error(f"❌ Wrong! Correct answer: {q['answer']}")
                         st.session_state.wrong_answers += 1
 
                         if q["topic"] not in st.session_state.wrong_topics:
                             st.session_state.wrong_topics.append(q["topic"])
-                    st.session_state.attempted += 1
 
-                    time.sleep(2)  # wait 2 seconds
+                        if st.session_state.ai_tutor:
+                            st.info(f"""
+                    🧠 AI Tutor Explanation:
 
-                    st.session_state.q_index += 1
+                    ✔ Correct Answer: {q['answer']}
 
-                    st.rerun()
+                    💡 Explanation: {q['explanation']}
+
+                    ⚠️ Common Mistake: Students often confuse this topic.
+
+                    🎯 Tip: Focus on {q['topic']} for improvement.
+                    """)
             if skip:
 
                     st.session_state.skipped_count += 1

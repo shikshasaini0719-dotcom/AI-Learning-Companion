@@ -1,5 +1,5 @@
 import random
-from questions import python_questions , ai_questions, ml_questions
+from questions_old import python_questions , ai_questions, ml_questions
 
 # Show Previous Results
 print("===== PREVIOUS RESULTS =====")
