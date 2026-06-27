@@ -1,7 +1,7 @@
 import streamlit as st
 import random
 import time
-from questions_old import python_questions, ai_questions, ml_questions
+from questions import python_questions, ai_questions, ml_questions
 
 def load_leaderboard():
     data = []
@@ -325,7 +325,7 @@ if st.session_state.started and st.session_state.questions:
 
             with col2:
                 skip = st.button("⏭️ Skip")
-                
+
             if st.button("💡 Hint"):
                 st.warning(f"Hint: This question is about {q['topic']}")
 
@@ -366,6 +366,15 @@ if st.session_state.started and st.session_state.questions:
 
                     🎯 Tip: Focus on {q['topic']} for improvement.
                     """)
+                            
+                    st.session_state.attempted += 1
+
+                    time.sleep(4)
+
+                    st.session_state.q_index += 1
+
+                    st.rerun()
+
             if skip:
 
                     st.session_state.skipped_count += 1

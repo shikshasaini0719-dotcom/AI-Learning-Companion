@@ -12,3 +12,7 @@ jayash,Python,3,5
 pooja,Python,3,5
 jayash,Python,3,5
 bhavika,Python,4,5
+devanshu,Python,0,5
+devanshu,Python,3,5
+kavish,AI Basics,5,5
+dakshu,Python,4,5
