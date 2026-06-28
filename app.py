@@ -3,6 +3,7 @@ import random
 import time
 from database import conn, cursor
 from questions import python_questions, ai_questions, ml_questions
+from pdf_generator import generate_pdf
 
 def load_leaderboard():
     data = []
@@ -288,7 +289,25 @@ if st.session_state.started and st.session_state.questions:
 
 
         st.write("🔄 Previous Attempts:", attempts)
+        # Generate PDF
+        pdf_file = generate_pdf(
+            st.session_state.name,
+            st.session_state.subject,
+            st.session_state.score,
+            st.session_state.target_questions,
+            accuracy,
+            grade,
+            st.session_state.wrong_topics
+        )
 
+# Download Button
+        with open(pdf_file, "rb") as file:
+            st.download_button(
+                label="📥 Download PDF Report",
+                data=file,
+                file_name=pdf_file,
+                mime="application/pdf"
+        )
         if st.button("🔄 Restart Exam"):
 
             st.session_state.started = False
