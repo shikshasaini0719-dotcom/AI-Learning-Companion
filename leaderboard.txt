@@ -1,18 +1,2 @@
 
-shiksha,1
-shiksha,2
-shiksha,2
 shiksha,4
-shiksha,3
-pooja,2
-shiksha,3
-shiksha,4
-jayash,2
-jayash,3
-pooja,3
-jayash,3
-bhavika,4
-devanshu,0
-devanshu,3
-kavish,5
-dakshu,4

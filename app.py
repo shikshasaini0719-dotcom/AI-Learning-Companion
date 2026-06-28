@@ -1,6 +1,7 @@
 import streamlit as st
 import random
 import time
+from database import conn, cursor
 from questions import python_questions, ai_questions, ml_questions
 
 def load_leaderboard():
@@ -172,19 +173,20 @@ if st.session_state.started and st.session_state.questions:
                 with open("students.txt", "a") as f:
                     f.write(st.session_state.name + "\n")
 
-                with open("results.txt", "a") as f:
-                    f.write(
-                        f"{st.session_state.name},"
-                        f"{st.session_state.subject},"
-                        f"{st.session_state.score},"
-                        f"{st.session_state.attempted}\n"
-                    )
+                cursor.execute(
+                    """
+                    INSERT INTO results(name, subject, score, attempted)
+                    VALUES (?, ?, ?, ?)
+                    """,
+                    (
+                        st.session_state.name,
+                        st.session_state.subject,
+                        st.session_state.score,
+                        st.session_state.attempted,
+                    ),
+                )
 
-                with open("leaderboard.txt", "a") as f:
-                    f.write(
-                        f"{st.session_state.name},"
-                        f"{st.session_state.score}\n"
-                    )
+                conn.commit()
 
                 st.session_state.saved = True
 
@@ -277,13 +279,13 @@ if st.session_state.started and st.session_state.questions:
 
         attempts = 0
 
-        try:
-            with open("results.txt", "r") as file:
-                for line in file:
-                    if st.session_state.name in line:
-                        attempts += 1
-        except:
-            pass
+        cursor.execute(
+            "SELECT COUNT(*) FROM results WHERE name = ?",
+            (st.session_state.name,)
+        )
+
+        attempts = cursor.fetchone()[0]
+
 
         st.write("🔄 Previous Attempts:", attempts)
 
