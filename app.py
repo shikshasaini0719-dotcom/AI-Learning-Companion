@@ -4,6 +4,14 @@ import time
 from database import conn, cursor
 from questions import python_questions, ai_questions, ml_questions
 from pdf_generator import generate_pdf
+from utils.ai_tutor import show_ai_tutor
+from utils.analytics import (
+    calculate_accuracy,
+    calculate_grade,
+    show_performance_report,
+    show_analytics_dashboard,
+)
+from pages.home import home_page
 
 def load_leaderboard():
     data = []
@@ -79,17 +87,34 @@ if "ai_tutor" not in st.session_state:
 
 
 # ---------------- UI ----------------
-st.markdown("## 🤖 AI Learning Companion")
-st.caption("Learn • Practice • Improve")
+st.set_page_config(
+    page_title="AI Learning Companion",
+    page_icon="🤖",
+    layout="wide"
+)
+
+st.title("🤖 AI Learning Companion")
+
+st.markdown("""
+### Learn • Practice • Improve
+
+Welcome to your personalized AI-powered learning platform.
+""")
+
+st.divider()
 
 st.subheader("👤 Student Details")
 
-name = st.text_input("Enter your Name")
+col1, col2 = st.columns(2)
 
-subject = st.selectbox(
-    "Choose Subject",
-    ["Python", "AI Basics", "Machine Learning"]
-)
+with col1:
+    name = st.text_input("👤 Enter Your Name")
+
+with col2:
+    subject = st.selectbox(
+        "📚 Choose Subject",
+        ["Python", "AI Basics", "Machine Learning"]
+    )
 
 st.session_state.ai_tutor = st.checkbox(
     "🤖 AI Tutor Mode (Explain answers)",
@@ -97,7 +122,12 @@ st.session_state.ai_tutor = st.checkbox(
 )
 
 # ---------------- START QUIZ ----------------
-if st.button("Start Quiz") and name:
+start = st.button(
+    "🚀 Start Quiz",
+    use_container_width=True
+)
+
+if start and name:
     st.session_state.started = True
     st.session_state.saved = False
     st.session_state.name = name
@@ -205,40 +235,25 @@ if st.session_state.started and st.session_state.questions:
         correct_answers = st.session_state.score
         wrong_answers = st.session_state.wrong_answers
 
-        accuracy = (
-            correct_answers /
-        st.session_state.attempted * 100
-        ) if st.session_state.attempted > 0 else 0
+        accuracy = calculate_accuracy(
+        correct_answers,
+        st.session_state.attempted
+        )
 
-        if accuracy >= 80:
-            grade = "A"
-        elif accuracy >= 60:
-            grade = "B"
-        elif accuracy >= 40:
-            grade = "C"
-        else:
-            grade = "Needs Improvement"
+        grade = calculate_grade(accuracy)
 
-        st.subheader("📊 Performance Report")
+        show_performance_report(
+            st.session_state.name,
+            st.session_state.subject,
+            accuracy,
+            grade
+        )
 
-        st.write("👤 Student:", st.session_state.name)
-        st.write("📚 Subject:", st.session_state.subject)
-        st.write("🎯 Accuracy:", f"{accuracy:.2f}%")
-        st.write("🎓 Grade:", grade)
-
-        st.subheader("📊 Analytics Dashboard")
-
-        st.write("✅ Correct Answers:", correct_answers)
-        st.write("❌ Wrong Answers:", wrong_answers)
-        st.write("⏭️ Skipped Questions:", st.session_state.skipped_count)
-
-        chart_data = {
-                "Correct": correct_answers,
-                "Wrong": wrong_answers,
-                "Skipped": st.session_state.skipped_count
-                        }
-
-        st.bar_chart(chart_data)
+        show_analytics_dashboard(
+            correct_answers,
+            wrong_answers,
+            st.session_state.skipped_count
+        )
         st.subheader("🏆 Leaderboard")
 
         data = load_leaderboard()
@@ -356,16 +371,7 @@ if st.session_state.started and st.session_state.questions:
                         st.success("🎉 Correct!")
 
                         if st.session_state.ai_tutor:
-                            st.info(f"""
-                    🧠 AI Tutor Explanation:
-
-                    ✔ Correct Answer: {q['answer']}
-
-                    💡 Why: {q['explanation']}
-
-                    🎯 Tip: Revise {q['topic']} once for strong exam prep.
-                    """)
-
+                            show_ai_tutor(q)
                         st.session_state.score += 1
 
                     else:
