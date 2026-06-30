@@ -12,6 +12,7 @@ from utils.analytics import (
     show_analytics_dashboard,
 )
 from pages.home import home_page
+from utils.session import init_session
 
 def load_leaderboard():
     data = []
@@ -34,64 +35,9 @@ def load_leaderboard():
     return data
 
 # ---------------- SESSION STATE ----------------
-if "score" not in st.session_state:
-    st.session_state.score = 0
-
-if "q_index" not in st.session_state:
-    st.session_state.q_index = 0
-
-if "questions" not in st.session_state:
-    st.session_state.questions = []
-
-if "started" not in st.session_state:
-    st.session_state.started = False
-
-if "subject" not in st.session_state:
-    st.session_state.subject = ""
-
-if "attempted" not in st.session_state:
-    st.session_state.attempted = 0
-
-if "skipped_questions" not in st.session_state:
-    st.session_state.skipped_questions = []
-
-if "total_questions" not in st.session_state:
-    st.session_state.total_questions = 0
-
-if "revisited_skips" not in st.session_state:
-    st.session_state.revisited_skips = False
-
-if "target_questions" not in st.session_state:
-    st.session_state.target_questions = 5
-
-if "skipped_count" not in st.session_state:
-    st.session_state.skipped_count = 0
-
-if "saved" not in st.session_state:
-    st.session_state.saved = False
-
-if "name" not in st.session_state:
-    st.session_state.name = ""
-
-if "force_submit" not in st.session_state:
-    st.session_state.force_submit = False
-
-if "wrong_topics" not in st.session_state:
-    st.session_state.wrong_topics = []
-
-if "wrong_answers" not in st.session_state:
-    st.session_state.wrong_answers = 0
-
-if "ai_tutor" not in st.session_state:
-    st.session_state.ai_tutor = True
-
+init_session()
 
 # ---------------- UI ----------------
-st.set_page_config(
-    page_title="AI Learning Companion",
-    page_icon="🤖",
-    layout="wide"
-)
 
 st.title("🤖 AI Learning Companion")
 
@@ -112,8 +58,8 @@ with col1:
 
 with col2:
     subject = st.selectbox(
-        "📚 Choose Subject",
-        ["Python", "AI Basics", "Machine Learning"]
+    "📚 Choose Subject",
+    ["Python", "AI Basics", "Machine Learning"]
     )
 
 st.session_state.ai_tutor = st.checkbox(
@@ -123,8 +69,8 @@ st.session_state.ai_tutor = st.checkbox(
 
 # ---------------- START QUIZ ----------------
 start = st.button(
-    "🚀 Start Quiz",
-    use_container_width=True
+"🚀 Start Quiz",
+use_container_width=True
 )
 
 if start and name:
