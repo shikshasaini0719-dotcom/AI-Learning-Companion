@@ -1,48 +1,65 @@
 import streamlit as st
+import random
 
+from questions import python_questions, ai_questions, ml_questions
 
-def home_page():
+st.title("🤖 AI Learning Companion")
 
-    st.title("🤖 AI Learning Companion")
-
-    st.markdown("""
+st.markdown("""
 ### Learn • Practice • Improve
 
 Welcome to your personalized AI-powered learning platform.
 """)
 
-    st.divider()
+st.divider()
 
-    st.subheader("📖 About This Project")
+st.subheader("👤 Student Details")
 
-    st.write("""
-AI Learning Companion is an interactive quiz platform developed using Python and Streamlit.
+col1, col2 = st.columns(2)
 
-It helps students:
+with col1:
+    name = st.text_input("👤 Enter Your Name")
 
-✅ Practice MCQs
+with col2:
+    subject = st.selectbox(
+    "📚 Choose Subject",
+    ["Python", "AI Basics", "Machine Learning"]
+    )
 
-✅ Learn from AI explanations
+st.session_state.ai_tutor = st.checkbox(
+    "🤖 AI Tutor Mode (Explain answers)",
+    value=True
+)
 
-✅ Track their performance
+# ---------------- START QUIZ ----------------
+start = st.button(
+"🚀 Start Quiz",
+use_container_width=True
+)
 
-✅ View leaderboard
+if start and name:
+    st.session_state.started = True
+    st.session_state.saved = False
+    st.session_state.name = name
+    st.session_state.score = 0
+    st.session_state.q_index = 0
+    st.session_state.attempted = 0
+    st.session_state.skipped_count = 0
+    st.session_state.skipped_questions = []
+    st.session_state.wrong_topics = []
+    st.session_state.revisited_skips = False
+    st.session_state.force_submit = False
+    st.session_state.wrong_answers = 0
+    st.session_state.subject = subject
+    if subject == "Python":
+        st.session_state.questions = python_questions.copy()
 
-✅ Download PDF reports
+    elif subject == "AI Basics":
+        st.session_state.questions = ai_questions.copy()
 
-✅ Improve weak topics
-""")
+    else:
+        st.session_state.questions = ml_questions.copy()
 
-    st.subheader("🛠 Technologies Used")
+    random.shuffle(st.session_state.questions)
 
-    col1, col2 = st.columns(2)
-
-    with col1:
-        st.success("🐍 Python")
-        st.success("🌐 Streamlit")
-        st.success("🗄 SQLite")
-
-    with col2:
-        st.success("📄 ReportLab")
-        st.success("📊 Matplotlib")
-        st.success("🤖 AI Tutor")
+    st.session_state.total_questions = st.session_state.target_questions
