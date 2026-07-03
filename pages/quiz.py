@@ -152,3 +152,42 @@ if st.session_state.started and st.session_state.questions:
             st.session_state.q_index += 1
 
             st.rerun()
+
+    else:
+
+        remaining = (
+        st.session_state.target_questions
+        - st.session_state.attempted
+        )
+
+        st.warning(
+            f"⚠️ Question bank exhausted. "
+            f"You still need {remaining} more answered question(s)."
+        )
+
+        if (
+            st.session_state.skipped_questions
+            and not st.session_state.revisited_skips
+        ):
+
+            col1, col2 = st.columns(2)
+
+            with col1:
+                if st.button("🔄 Continue With Skipped Questions"):
+
+                    st.session_state.questions = (
+                    st.session_state.skipped_questions.copy()
+                    )
+
+                    st.session_state.skipped_questions = []
+                    st.session_state.q_index = 0
+                    st.session_state.revisited_skips = True
+
+                    st.rerun()
+
+            with col2:
+                if st.button("✅ Submit Exam Anyway"):
+
+                    st.session_state.force_submit = True
+
+                    st.rerun()
