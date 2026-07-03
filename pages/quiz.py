@@ -1,6 +1,9 @@
 import streamlit as st
 import time
 
+from utils.session import init_session
+init_session()
+
 from database import conn, cursor
 from pdf_generator import generate_pdf
 from utils.ai_tutor import show_ai_tutor
@@ -37,7 +40,7 @@ if not st.session_state.started:
     st.stop()
 
 
-    if st.session_state.started and st.session_state.questions:
+if st.session_state.started and st.session_state.questions:
 
     q_index = st.session_state.q_index
     questions = st.session_state.questions
@@ -68,3 +71,84 @@ if not st.session_state.started:
 {st.session_state.target_questions - st.session_state.attempted}
 """
     )
+    if (
+    st.session_state.attempted >= st.session_state.target_questions
+    or st.session_state.force_submit
+):
+        st.switch_page("pages/results.py")
+        st.stop()
+        
+    if q_index < len(questions):
+
+        q = questions[q_index]
+
+        st.markdown("### 🧾 Question")
+        st.success(q["question"])
+
+        answer = st.radio(
+            "Choose your answer:",
+            q["options"],
+            key=f"ans_{q_index}"
+        )
+
+        col1, col2 = st.columns(2)
+
+        with col1:
+            submit = st.button("✅ Submit Answer")
+
+        with col2:
+            skip = st.button("⏭️ Skip")
+
+        if st.button("💡 Hint"):
+            st.warning(f"Hint: This question is about {q['topic']}")
+
+        if submit:
+
+            if answer == q["answer"]:
+                st.success("🎉 Correct!")
+
+                if st.session_state.ai_tutor:
+                    show_ai_tutor(q)
+
+                st.session_state.score += 1
+
+            else:
+                st.error(f"❌ Wrong! Correct answer: {q['answer']}")
+
+                st.session_state.wrong_answers += 1
+
+                if q["topic"] not in st.session_state.wrong_topics:
+                    st.session_state.wrong_topics.append(q["topic"])
+
+                if st.session_state.ai_tutor:
+                    st.info(f"""
+        🧠 AI Tutor Explanation:
+
+        ✔ Correct Answer: {q['answer']}
+
+        💡 Explanation: {q['explanation']}
+
+        ⚠️ Common Mistake: Students often confuse this topic.
+
+        🎯 Tip: Focus on {q['topic']} for improvement.
+        """)
+
+            st.session_state.attempted += 1
+
+            time.sleep(4)
+
+            st.session_state.q_index += 1
+
+            st.rerun()
+
+        if skip:
+
+            st.session_state.skipped_count += 1
+
+            st.session_state.skipped_questions.append(
+            questions[q_index]
+            )
+
+            st.session_state.q_index += 1
+
+            st.rerun()

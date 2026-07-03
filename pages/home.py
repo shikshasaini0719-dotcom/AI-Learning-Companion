@@ -2,6 +2,9 @@ import streamlit as st
 import random
 
 from questions import python_questions, ai_questions, ml_questions
+from utils.session import init_session
+
+init_session()
 
 st.title("🤖 AI Learning Companion")
 
@@ -63,3 +66,4 @@ if start and name:
     random.shuffle(st.session_state.questions)
 
     st.session_state.total_questions = st.session_state.target_questions
+    st.switch_page("pages/quiz.py")
