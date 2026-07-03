@@ -1,5 +1,6 @@
 import streamlit as st
 
+from datetime import datetime
 from utils.session import init_session
 from database import conn, cursor
 from utils.analytics import (
@@ -10,12 +11,14 @@ from utils.analytics import (
 )
 from pdf_generator import generate_pdf
 
+
 init_session()
 
 st.title("🎉 Quiz Results")
 
 # Save result only once
 if not st.session_state.saved:
+    current_time = datetime.now().isoformat(sep=" ", timespec="seconds")
 
     try:
         with open("students.txt", "a") as f:
@@ -23,14 +26,15 @@ if not st.session_state.saved:
 
         cursor.execute(
             """
-            INSERT INTO results(name, subject, score, attempted)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO results(name, subject, score, attempted , timestamp)
+            VALUES (?, ?, ?, ?, ?)
             """,
             (
                 st.session_state.name,
                 st.session_state.subject,
                 st.session_state.score,
                 st.session_state.attempted,
+                current_time
             ),
         )
 
