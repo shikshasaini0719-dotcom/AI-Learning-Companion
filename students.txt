@@ -6,3 +6,11 @@ dev
 shainy
 
 list
+
+jayash
+
+pooja
+
+shiksha
+
+amit
