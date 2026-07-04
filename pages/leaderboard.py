@@ -1,5 +1,6 @@
 import streamlit as st
 from database import cursor
+from datetime import datetime
 
 st.title("🏆 Leaderboard")
 cursor.execute("""
@@ -18,6 +19,9 @@ if rows:
     rank = 1
 
     for name, subject, score, attempted , timestamp in rows:
+        formatted_time = datetime.fromisoformat(timestamp).strftime(
+            "%d %b %Y %I:%M %p"
+        )
 
         medal = ""
 
@@ -33,7 +37,7 @@ if rows:
             "Name": name,
             "Subject": subject,
             "Score": score,
-            "Attempted": attempted
+            "Attempted": attempted,
             "Date & Time": timestamp.replace("T", " ")
         })
 
