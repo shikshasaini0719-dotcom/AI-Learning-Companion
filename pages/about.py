@@ -1,48 +1,87 @@
 import streamlit as st
 
+st.title("ℹ️ About AI Learning Companion")
 
-def home_page():
+st.markdown("""
+## 🎯 Project Overview
 
-    st.title("🤖 AI Learning Companion")
+AI Learning Companion is an interactive quiz platform developed using **Python** and **Streamlit**.
 
-    st.markdown("""
-### Learn • Practice • Improve
-
-Welcome to your personalized AI-powered learning platform.
+It helps students strengthen their understanding of **Python**, **Artificial Intelligence**, and **Machine Learning** through quizzes, AI explanations, performance analytics, and downloadable reports.
 """)
 
-    st.divider()
+st.divider()
 
-    st.subheader("📖 About This Project")
+st.subheader("✨ Key Features")
 
-    st.write("""
-AI Learning Companion is an interactive quiz platform developed using Python and Streamlit.
+col1, col2 = st.columns(2)
 
-It helps students:
+with col1:
+    st.success("✅ Interactive MCQ Quiz")
+    st.success("🤖 AI Tutor")
+    st.success("📊 Performance Analytics")
+    st.success("📄 PDF Report")
 
-✅ Practice MCQs
+with col2:
+    st.success("🏆 Leaderboard")
+    st.success("📜 Quiz History")
+    st.success("💡 Hints & Explanations")
+    st.success("🗄 SQLite Database")
 
-✅ Learn from AI explanations
+st.divider()
 
-✅ Track their performance
+st.subheader("🛠 Tech Stack")
 
-✅ View leaderboard
+col1, col2 = st.columns(2)
 
-✅ Download PDF reports
+with col1:
+    st.info("🐍 Python")
+    st.info("🌐 Streamlit")
+    st.info("🗄 SQLite")
 
-✅ Improve weak topics
+with col2:
+    st.info("📄 ReportLab")
+    st.info("📊 Matplotlib")
+    st.info("🐙 Git & GitHub")
+
+st.divider()
+
+st.subheader("📂 Project Structure")
+
+st.code("""
+AI-Learning-Companion/
+│
+├── app.py
+├── database.py
+├── questions.py
+├── pdf_generator.py
+│
+├── pages/
+│   ├── home.py
+│   ├── quiz.py
+│   ├── results.py
+│   ├── history.py
+│   ├── leaderboard.py
+│   └── about.py
+│
+├── utils/
+│   ├── session.py
+│   ├── analytics.py
+│   └── ai_tutor.py
 """)
 
-    st.subheader("🛠 Technologies Used")
+st.divider()
 
-    col1, col2 = st.columns(2)
+st.subheader("🚀 Future Enhancements")
 
-    with col1:
-        st.success("🐍 Python")
-        st.success("🌐 Streamlit")
-        st.success("🗄 SQLite")
+st.write("""
+- AI-generated quiz questions
+- Adaptive difficulty levels
+- User login system
+- Cloud database integration
+- Performance prediction using Machine Learning
+""")
 
-    with col2:
-        st.success("📄 ReportLab")
-        st.success("📊 Matplotlib")
-        st.success("🤖 AI Tutor")
+st.divider()
+
+st.caption("Built with Python • Streamlit • SQLite • ReportLab")

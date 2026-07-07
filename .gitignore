@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+
+# Database
+quiz.db
+
+# Generated PDF Reports
+*_Quiz_Report.pdf
+
+# Temporary files
+*.log
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+
+students.txt
+results.txt
+leaderboard.txt
