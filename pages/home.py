@@ -8,37 +8,53 @@ init_session()
 
 st.title("🤖 AI Learning Companion")
 
-st.markdown("""
-### 🚀 Learn • Practice • Improve
+st.caption("Learn • Practice • Improve • Analyze")
+
+st.markdown("---")
+
+st.markdown(
+    """
+## 👋 Welcome!
 
 Master **Python**, **Artificial Intelligence**, and **Machine Learning**
-through interactive quizzes, AI-powered explanations, and detailed performance analytics.
+through interactive quizzes with instant feedback and performance analytics.
 
----
-""")
+Choose a subject below and begin your learning journey!
+"""
+)
 
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.info("""
-### 📚 Practice
+    st.info(
+        """
+### 📚 Learn
 
-Attempt quizzes from multiple subjects.
-""")
+Practice subject-wise quizzes
+with curated questions.
+"""
+    )
 
 with col2:
-    st.success("""
-### 🤖 AI Tutor
+    st.success(
+        """
+### 📊 Analyze
 
-Get instant explanations after every question.
-""")
+Track your accuracy,
+grades and performance.
+"""
+    )
 
 with col3:
-    st.warning("""
-### 📊 Analytics
+    st.warning(
+        """
+### 🏆 Improve
 
-Track your progress with reports and history.
-""")
+Review weak topics
+and download PDF reports.
+"""
+    )
+
 st.divider()
 
 st.subheader("🎓 Student Information")
@@ -105,3 +121,9 @@ if start and name:
 
     st.session_state.total_questions = st.session_state.target_questions
     st.switch_page("pages/quiz.py")
+
+st.markdown("---")
+
+st.caption(
+    "© 2026 AI Learning Companion | Built with ❤️ using Streamlit"
+)

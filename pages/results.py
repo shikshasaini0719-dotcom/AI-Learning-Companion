@@ -14,7 +14,13 @@ from pdf_generator import generate_pdf
 
 init_session()
 
-st.title("🎉 Quiz Results")
+if "celebrated" not in st.session_state:
+    st.session_state.celebrated = False
+
+if not st.session_state.celebrated:
+    st.balloons()
+    st.session_state.celebrated = True
+
 
 # Save result only once
 if not st.session_state.saved:
@@ -46,21 +52,59 @@ if not st.session_state.saved:
         st.error(f"Error saving data: {e}")
         st.session_state.saved = True
 
-st.success("🎉 Quiz Completed!")
+st.success("🎉 Quiz Completed Successfully!")
 
-st.metric("Score", st.session_state.score)
-st.metric("Attempted", st.session_state.attempted)
-st.metric("Skipped", st.session_state.skipped_count)
+st.markdown(
+    f"## 👏 Congratulations, {st.session_state.name}!"
+)
+
+st.caption(
+    f"You have successfully completed the **{st.session_state.subject}** quiz."
+)
+
+st.markdown("---")
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.metric(
+        "🏆 Score",
+        f"{st.session_state.score}/{st.session_state.target_questions}"
+    )
+
+with col2:
+    st.metric(
+        "📝 Attempted",
+        st.session_state.attempted
+    )
+
+with col3:
+    st.metric(
+        "⏭ Skipped",
+        st.session_state.skipped_count
+    )
 
 correct_answers = st.session_state.score
 wrong_answers = st.session_state.wrong_answers
 
-accuracy = calculate_accuracy(
-    correct_answers,
-    st.session_state.attempted
-)
-
+accuracy = calculate_accuracy( correct_answers, st.session_state.attempted )
 grade = calculate_grade(accuracy)
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.metric(
+        "🎯 Accuracy",
+        f"{accuracy:.1f}%"
+    )
+
+with col2:
+    st.metric(
+        "🏅 Grade",
+        grade
+    )
+
+st.markdown("---")
 
 show_performance_report(
     st.session_state.name,
@@ -75,11 +119,12 @@ show_analytics_dashboard(
     st.session_state.skipped_count
 )
 
-st.subheader("📚 Topics To Review")
+st.markdown("## 📚 Topics to Review")
+st.caption("These are the concepts you should revise based on your answers.")
 
 if st.session_state.wrong_topics:
 
-    for topic in set(st.session_state.wrong_topics):
+    for topic in sorted(set(st.session_state.wrong_topics)):
         st.write("🔹", topic)
 
 else:
@@ -96,6 +141,14 @@ pdf_file = generate_pdf(
 )
 
 with open(pdf_file, "rb") as file:
+
+    st.markdown("---")
+
+    st.subheader("📄 Download Report")
+
+    st.caption(
+        "Save your performance report as a PDF for future reference."
+    )
     st.download_button(
         label="📥 Download PDF Report",
         data=file,
@@ -119,5 +172,6 @@ if st.button("🔄 Restart Exam", use_container_width=True):
     st.session_state.subject = ""
     st.session_state.force_submit = False
     st.session_state.wrong_answers = 0
+    st.session_state.celebrated = False
 
     st.switch_page("pages/home.py")

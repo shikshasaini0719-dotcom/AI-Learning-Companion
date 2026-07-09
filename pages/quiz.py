@@ -35,6 +35,10 @@ def load_leaderboard():
 
 st.title("📝 Quiz")
 
+st.caption("Answer carefully. Your performance will be recorded.")
+
+st.markdown("---")
+
 if not st.session_state.started:
     st.warning("⚠️ Please start the quiz from the Home page.")
     st.stop()
@@ -44,6 +48,10 @@ if st.session_state.started and st.session_state.questions:
 
     q_index = st.session_state.q_index
     questions = st.session_state.questions
+
+    st.write(
+    f"### 👤 {st.session_state.name} | 📚 {st.session_state.subject}"
+)
 
     # Progress
     if st.session_state.target_questions > 0:
@@ -57,20 +65,48 @@ if st.session_state.started and st.session_state.questions:
 
     st.progress(progress)
 
-    st.info(
-        f"""
-📚 Total Questions Available: {len(st.session_state.questions)}
+    col1, col2, col3 = st.columns(3)
 
-🎯 Questions Required: {st.session_state.target_questions}
+    with col1:
+        st.metric(
+        "Attempted",
+        st.session_state.attempted
+        )
 
-✅ Attempted: {st.session_state.attempted}
+    with col2:
+        st.metric(
+        "Skipped",
+        st.session_state.skipped_count
+        )
 
-⏭️ Skipped: {st.session_state.skipped_count}
+    with col3:
+        st.metric(
+        "Remaining",
+        st.session_state.target_questions
+        - st.session_state.attempted
+        )
 
-🎯 Questions Left To Solve:
-{st.session_state.target_questions - st.session_state.attempted}
-"""
+#---LIVE PERFORMANCE---
+
+    c1, c2, c3, c4 = st.columns(4)
+
+    c1.metric("⭐ Score", st.session_state.score)
+    c2.metric("❌ Wrong", st.session_state.wrong_answers)
+    c3.metric("⏭ Skipped", st.session_state.skipped_count)
+
+    accuracy = (
+    0
+        if st.session_state.attempted == 0
+        else round(
+            st.session_state.score
+            / st.session_state.attempted
+            * 100
+        )
     )
+
+    c4.metric("🎯 Accuracy", f"{accuracy}%")
+    st.markdown("---")
+
     if (
     st.session_state.attempted >= st.session_state.target_questions
     or st.session_state.force_submit
@@ -82,26 +118,39 @@ if st.session_state.started and st.session_state.questions:
 
         q = questions[q_index]
 
-        st.markdown("### 🧾 Question")
-        st.success(q["question"])
+        st.subheader(
+            f"Question {st.session_state.attempted + 1} "
+            f"of {st.session_state.target_questions}"
+        )
 
+        st.markdown("---")
+        with st.container(border=True):
+
+            st.markdown("### 📖 Question")
+
+            st.write(q["question"])
+            st.write("")
         answer = st.radio(
-            "Choose your answer:",
+            "Select your answer:",
             q["options"],
             key=f"ans_{q_index}"
         )
 
-        col1, col2 = st.columns(2)
+        col1, col2, col3 = st.columns([2, 2, 1])
 
         with col1:
-            submit = st.button("✅ Submit Answer")
+            submit = st.button("✅ Submit", use_container_width=True)
 
         with col2:
-            skip = st.button("⏭️ Skip")
+            skip = st.button("⏭ Skip", use_container_width=True)
 
-        if st.button("💡 Hint"):
-            st.warning(f"Hint: This question is about {q['topic']}")
+        with col3:
+            hint = st.button("💡", use_container_width=True)
 
+        if hint:
+            st.info(
+        f"💡 Focus on the topic: **{q['topic']}**"
+        )
         if submit:
 
             if answer == q["answer"]:
@@ -191,3 +240,5 @@ if st.session_state.started and st.session_state.questions:
                     st.session_state.force_submit = True
 
                     st.rerun()
+
+        

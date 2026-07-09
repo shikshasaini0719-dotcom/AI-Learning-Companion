@@ -1,12 +1,24 @@
 # 🤖 AI Learning Companion
 
-An interactive quiz platform built with **Python** and **Streamlit** to help students learn **Python**, **Artificial Intelligence**, and **Machine Learning** through quizzes, AI-powered explanations, and performance analytics.
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge&logo=streamlit)](https://ai-learning-companion-shiksha.streamlit.app)
+![Python](https://img.shields.io/badge/Python-3.14-blue?style=for-the-badge&logo=python)
+![Streamlit](https://img.shields.io/badge/Streamlit-1.58-red?style=for-the-badge&logo=streamlit)
+![SQLite](https://img.shields.io/badge/SQLite-Database-blue?style=for-the-badge&logo=sqlite)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+
+An interactive AI-powered quiz application built with Python and Streamlit.
 
 ---
 
 ## 📌 Project Overview
 
 AI Learning Companion provides an engaging way to practice technical concepts using multiple-choice quizzes. It offers instant feedback, AI tutor explanations, quiz history, leaderboards, and downloadable PDF reports.
+
+---
+
+## 🌐 Live Demo
+
+👉 https://ai-learning-companion-shiksha.streamlit.app
 
 ---
 
