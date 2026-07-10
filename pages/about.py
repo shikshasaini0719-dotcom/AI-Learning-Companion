@@ -46,6 +46,20 @@ with col2:
 
 st.divider()
 
+st.subheader("🎓 Skills Demonstrated")
+
+st.markdown("""
+- Python Programming
+- Streamlit Application Development
+- SQLite Database Integration
+- Session State Management
+- Data Analytics & Visualization
+- PDF Report Generation
+- Git & GitHub Version Control
+""")
+
+st.divider()
+
 st.subheader("📂 Project Structure")
 
 st.code("""
@@ -85,3 +99,15 @@ st.write("""
 st.divider()
 
 st.caption("Built with Python • Streamlit • SQLite • ReportLab")
+
+st.divider()
+
+st.subheader("👩‍💻 Developer")
+
+st.info("""
+**Shiksha Saini**
+
+B.Tech CSE (Artificial Intelligence & Machine Learning)
+
+AI Learning Companion Version 1.0
+""")
