@@ -110,14 +110,25 @@ streamlit run app.py
 
 ## 📸 Screenshots
 
-> Screenshots will be added soon.
+# 📸 Screenshots
 
-- Home Page
-- Quiz Page
-- Results Dashboard
-- Leaderboard
-- History
-- About Page
+## 🏠 Home
+![Home](screenshots/home.png)
+
+## 📝 Quiz
+![Quiz](screenshots/quiz.png)
+
+## 🎉 Results
+![Results](screenshots/result.png)
+
+## 🏆 Leaderboard
+![Leaderboard](screenshots/leaderboard.png)
+
+## 📜 Generated PDF Report
+![Generated PDF Report](screenshots/pdf.png)
+
+## ℹ️ About
+![About](screenshots/about.png)
 
 ---
 
@@ -132,11 +143,10 @@ streamlit run app.py
 
 ---
 
-## 👩‍💻 Developer
-
 **Shiksha Saini**
 
 B.Tech (Artificial Intelligence & Machine Learning)
+- GitHub: https://github.com/shikshasaini0719-dotcom
 
 ---
 
