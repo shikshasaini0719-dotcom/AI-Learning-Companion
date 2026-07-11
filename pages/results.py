@@ -27,9 +27,7 @@ if not st.session_state.saved:
     current_time = datetime.now().isoformat(sep=" ", timespec="seconds")
 
     try:
-        with open("students.txt", "a") as f:
-            f.write(st.session_state.name + "\n")
-
+        
         cursor.execute(
             """
             INSERT INTO results(name, subject, score, attempted , timestamp)
