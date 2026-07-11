@@ -74,7 +74,6 @@ AI-Learning-Companion/
 │   └── ai_tutor.py
 │
 ├── leaderboard.txt
-├── students.txt
 └── README.md
 ```
 
