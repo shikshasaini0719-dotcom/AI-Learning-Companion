@@ -110,8 +110,6 @@ streamlit run app.py
 
 ## 📸 Screenshots
 
-# 📸 Screenshots
-
 ## 🏠 Home
 ![Home](screenshots/home.png)
 
